@@ -7,31 +7,36 @@ import axios from "axios";
 const url = "https://fakestoreapi.com/auth/login/";
 
 function Login() {
-  const [email, setEmail] = useState("");
+  const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    setEmail("");
-    setPassword("");
-
-    let user = {
-      userEmail: email,
-      userPassword: password,
-    };
-
-    let navigate = useNavigate;
+    setLoading(true);
     axios
-      .post(url, user)
+      .post(url, { username, password })
       .then((res) => {
-        console.log("res=>", res);
-        localStorage.setItem("token", res.token);
-        navigate("/admin");
+        const data = res.data;
+        if (data.message === "Error") {
+          console.log("username or password is incorrect");
+        } else {
+          console.log(data);
+          localStorage.setItem("token", data.token);
+          window.open("/admin", "_self");
+        }
       })
-      .catch((err) => console.log("error =>", err));
+      .catch((err) => console.log(err))
+      .finally(() => setLoading(false));
   };
   return (
     <>
+      {loading && (
+        <div id="loading">
+          <span class="loader"></span>
+        </div>
+      )}
+
       <div className="top">
         <div className="container-fluid">
           <div className="top__info">
@@ -58,12 +63,12 @@ function Login() {
                 Email Address*
               </label>
               <input
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
                 className="login__input"
                 id="text"
                 type="text"
-                placeholder="Enter Your Email"
+                placeholder={`Example: mor_2314`}
               />
             </div>
             <div className="login__card">
@@ -76,7 +81,7 @@ function Login() {
                 className="login__input"
                 id="password"
                 type="password"
-                placeholder="Enter Your password"
+                placeholder={`Example: 83r5^_`}
               />
             </div>
             <div className="login__box">
