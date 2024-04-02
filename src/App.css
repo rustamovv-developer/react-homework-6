@@ -19,15 +19,18 @@ ul {
 a {
   text-decoration: none;
 }
+html {
+  scroll-behavior: smooth;
+}
 
 i,
-button,
-input {
+button {
   border: none;
   cursor: pointer;
 }
 input {
   outline: none;
+  border: none;
 }
 svg {
   cursor: pointer;

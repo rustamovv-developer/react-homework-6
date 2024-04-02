@@ -9,6 +9,17 @@ const API_URL = "https://fakestoreapi.com/products";
 function Products() {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [categories, setCategories] = useState([]);
+
+  useEffect(() => {
+    setLoading(true);
+    axios
+      .get(`${API_URL}/categories`)
+      .then((res) => setCategories(res.data))
+      .catch((err) => console.log(err))
+      .finally(() => setLoading(false));
+  }, []);
+
   useEffect(() => {
     setLoading(true);
     axios
