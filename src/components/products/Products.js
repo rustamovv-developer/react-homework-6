@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import axios from "axios";
 import star from "../../assets/images/star.png";
 import "../../sass/products.scss";
+import "../../sass/links.scss";
 
 const API_URL = "https://fakestoreapi.com/products";
 
@@ -10,6 +11,7 @@ function Products() {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(false);
   const [categories, setCategories] = useState([]);
+  const [categoryValue, setCategoryValue] = useState("");
 
   useEffect(() => {
     setLoading(true);
@@ -22,12 +24,27 @@ function Products() {
 
   useEffect(() => {
     setLoading(true);
+    let url =
+      categoryValue === ""
+        ? `${API_URL}`
+        : `${API_URL}/category/${categoryValue}`;
     axios
-      .get(API_URL)
+      .get(url)
       .then((res) => setData(res.data))
       .catch((err) => console.log(err))
       .finally(() => setLoading(false));
-  }, []);
+  }, [categoryValue]);
+
+  const getCategory = (text) => {
+    setCategoryValue(text);
+  };
+
+  let categoryItems = categories?.map((el, inx) => (
+    <li onClick={() => getCategory(el)} key={inx} className="products__link">
+      {el}
+    </li>
+  ));
+
   let products = data?.map((el) => (
     <div key={el.id} className="products__card">
       <h4 class="products__h4">{el.id}</h4>
@@ -56,11 +73,25 @@ function Products() {
   ));
   return (
     <>
-      {loading && (
-        <div id="loading">
-          <span class="loader"></span>
+      <>
+        {loading && (
+          <div id="loading">
+            <span class="loader"></span>
+          </div>
+        )}
+
+        <div class="container">
+          <div class="products__top">
+            <h2 class="products__top__title">Popular Products</h2>
+            <ul class="products__list" style={{ cursor: "pointer" }}>
+              <li onClick={() => getCategory("")} class="products__link">
+                All
+              </li>
+              {categoryItems}
+            </ul>
+          </div>
         </div>
-      )}
+      </>
       <div className="container">
         <div class="products__row">{products}</div>
       </div>

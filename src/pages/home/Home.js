@@ -1,7 +1,6 @@
 import React, { memo } from "react";
 import "../../sass/home.scss";
 import { Categorys } from "../../static";
-import Links from "../../components/links/Links";
 import Products from "../../components/products/Products";
 
 function Home() {
@@ -77,7 +76,6 @@ function Home() {
             </div>
           </div>
         </section>
-        <Links />
         <Products />
       </main>
     </>
